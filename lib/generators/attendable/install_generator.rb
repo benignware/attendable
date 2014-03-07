@@ -12,7 +12,6 @@ module Attendable
       def create_migrations
         puts 'install attendable'
         migration_template 'create_attendable_members.rb', "db/migrate/create_attendable_members.rb"
-        template 'attendable.rb', "app/models/attendable.rb"
         template 'attendable_member.rb', "app/models/attendable_member.rb"
       end
       
