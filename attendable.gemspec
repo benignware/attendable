@@ -7,11 +7,11 @@ require "attendable/version"
 Gem::Specification.new do |s|
   s.name        = "attendable"
   s.version     = Attendable::VERSION
-  s.authors     = ["TODO: Your name"]
-  s.email       = ["TODO: Your email"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of Attendable."
-  s.description = "TODO: Description of Attendable."
+  s.authors     = ["Rafael Nowrotek"]
+  s.email       = ["mail@benignware.com"]
+  s.homepage    = "http://benignware.com"
+  s.summary     = "Attendable plugin"
+  s.description = "The attendable-plugin let's you add members to a Group model and easily build rsvp actions"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
