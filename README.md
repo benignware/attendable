@@ -16,7 +16,7 @@ rails generate attendable:install
 class Event < ActiveRecord::Base
   
   include Attendable
-  is_attendable by: :users, as: :event_members
+  acts_as_attendable by: :users, as: :event_members
     
 end
 ```
