@@ -14,7 +14,7 @@ module ActsAsAttendable
       has_many association_name, as: :attendable, dependent: :destroy, class_name: "AttendableMember"
       has_many :attendees, -> { where(attendable_members: {status: :attending}) }, through: association_name, source: :user, source_type: attendee_class_name
       
-      include Attendable::ActsAsAttendable::LocalInstanceMethods
+      include ActsAsAttendable::LocalInstanceMethods
     
     end
 
