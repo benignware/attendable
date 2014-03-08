@@ -38,4 +38,4 @@ module ActsAsAttendable
     
 end
 
-ActiveRecord::Base.send :include, Attendable::ActsAsAttendable
+ActiveRecord::Base.send :include, ActsAsAttendable
