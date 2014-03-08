@@ -1,12 +1,12 @@
 $:.push File.expand_path("../lib", __FILE__)
 
 # Maintain your gem's version:
-require "attendable/version"
+require "acts_as_attendable/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "attendable"
-  s.version     = Attendable::VERSION
+  s.name        = "acts_as_attendable"
+  s.version     = ActsAsAttendable::VERSION
   s.authors     = ["Rafael Nowrotek"]
   s.email       = ["mail@benignware.com"]
   s.homepage    = "http://benignware.com"
