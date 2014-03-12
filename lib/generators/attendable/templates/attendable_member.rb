@@ -7,9 +7,9 @@ class AttendableMember < ActiveRecord::Base
   protected
 
   def generate_token
-    self.activation_token = loop do
+    self.invitation_token = loop do
       random_token = SecureRandom.urlsafe_base64(nil, false)
-      break random_token unless AttendableMember.exists?(activation_token: random_token)
+      break random_token unless AttendableMember.exists?(invitation_token: random_token)
     end
   end
   
