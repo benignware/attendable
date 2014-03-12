@@ -53,7 +53,7 @@ module Attendable
       
       def accept_invitation(invitation_token, invitee)
         if (!self.is_member?(invitee))
-          token_member = AttendableMember.where(activation_token: invitation_token, attendable: self)[0]
+          token_member = AttendableMember.where(invitation_token: invitation_token, attendable: self)[0]
           if token_member && token_member.invitee.nil?
             token_member.invitee = invitee
             token_member.save
