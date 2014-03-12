@@ -3,7 +3,9 @@ class CreateAttendableMembers < ActiveRecord::Migration
     create_table :attendable_members do |t|
       t.string :status
       t.references :attendable, polymorphic: true
-      t.references :user, polymorphic: true
+      t.references :invitee, polymorphic: true
+      t.string :invitation_token
+      t.string :invitation_key
       t.timestamps
     end
   end
