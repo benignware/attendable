@@ -224,11 +224,9 @@ Setup the invitation text email
 Welcome friend,
 
 You were invited to an event.
-
 To attend the event, please click this link: <%= @attend_url %>
 
 Thanks for joining and have a great day!
-
 ```
 
 Setup the invitation html email
@@ -250,7 +248,6 @@ Setup the invitation html email
     <p>Thanks for joining and have a great day!</p>
   </body>
 </html>
-
 ```
 
 
