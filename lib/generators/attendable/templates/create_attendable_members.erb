@@ -1,0 +1,21 @@
+class Create<%= name.pluralize %> < ActiveRecord::Migration
+  def self.up
+    create_table :<%= name.tableize %> do |t|
+<% attributes.each do |attribute| %>
+      t.<%= attribute.type %> :<%= attribute.name %>
+<% end %>
+      t.references :attendable, polymorphic: true
+      t.references :invitee, polymorphic: true
+      t.string :invitation_token
+      t.string :invitation_key
+      t.string :rsvp_status
+
+      t.timestamps
+      
+    end
+  end
+
+  def self.down
+    drop_table :<%= name.tableize %>
+  end
+end
