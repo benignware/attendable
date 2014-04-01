@@ -1,7 +1,7 @@
 Attendable
 ==========
 
-The attendable-plugin let's you add members to a Group model and easily build rsvp actions
+The attendable-plugin let's you add members to a model and easily build rsvp actions
 
 Usage
 -----
