@@ -66,7 +66,7 @@ module Attendable
                     puts '**** AN ERROR OCCURRED WHILE SAVING'
                   end
                 elsif token_member.invitee != invitee
-                  puts '**** MEMBER USER IS NOT INVITEE RETURN NIL'
+                  puts '**** MEMBER USER IS NOT INVITEE RETURN NIL' + token_member.invitee.id.to_s + " -> " + invitee.id.to_s
                   return nil
                 end
                 puts '**** RETURN MEMBER'
