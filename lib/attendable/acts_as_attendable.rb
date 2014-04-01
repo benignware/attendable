@@ -49,20 +49,21 @@ module Attendable
         
         define_method "accept_invitation" do |invitation_token, invitee| 
           puts '**** ACCEPT INVITATION: ' + invitee.to_s
-          if (!self.is_member?(invitee))
-            token_member = clazz.where(invitation_token: invitation_token, attendable: self)[0]
-            if token_member && token_member.invitee.nil?
-              token_member.invitee = invitee
-              token_member.save
-              return token_member
+          if (invitee)
+            if (!self.is_member?(invitee))
+              token_member = clazz.where(invitation_token: invitation_token, attendable: self)[0]
+              if token_member && token_member.invitee.nil?
+                token_member.invitee = invitee
+                token_member.save
+                return token_member
+              else
+                return nil
+              end
             else
-              return nil
+              return clazz.where(invitee: invitee, attendable: self)[0]
             end
-          else
-            return clazz.where(invitee: invitee, attendable: self)[0]
           end
         end
-      
       end
   
     end
