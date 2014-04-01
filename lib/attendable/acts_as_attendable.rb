@@ -69,7 +69,7 @@ module Attendable
               end
             else
               # if a member for invitee already exists, return the current invitee's member
-              token_member = clazz.where(invitee: invitee)
+              token_member = clazz.find_by_invitee(invitee)
               puts "-----> MEMBER EXISTS FIND BY INVITEE (current user)" + token_member.to_s
               return token_member
             end
