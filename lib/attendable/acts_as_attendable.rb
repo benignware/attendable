@@ -52,6 +52,7 @@ module Attendable
         define_method "accept_invitation" do |invitation_token, invitee| 
           if (invitation_token && invitee)
             if !is_member?(invitee)
+              # only process invitation token if invitee is not already set
               token_member = clazz.where(invitation_token: invitation_token, attendable: self)[0]
               if token_member
                 if token_member.invitee.nil?
@@ -67,7 +68,9 @@ module Attendable
                 return token_member
               end
             else
-              clazz.where(invitee: invitee)
+              # if a member for invitee already exists, return the current invitee's member
+              token_member = clazz.where(invitee: invitee)
+              puts "-----> MEMBER EXISTS FIND BY INVITEE (current user)"
             end
           end
         end
