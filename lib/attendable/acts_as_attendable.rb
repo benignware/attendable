@@ -20,6 +20,8 @@ module Attendable
         
         # instance methods 
         define_method "is_member?" do |user| 
+          puts 'is member? ' + user.to_s
+          puts 'clazz: ' + clazz.to_s
           clazz.where(invitee: user, attendable: self).count > 0
         end
       
