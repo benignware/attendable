@@ -50,7 +50,7 @@ module Attendable
         define_method "accept_invitation" do |invitation_token, invitee| 
           puts '**** ACCEPT INVITATION: ' + invitee.to_s + " ----> " + invitee.email.to_s
           if (invitee)
-            puts '**** ACCEPT INVITATION USER: ' + invitee.email.to_s
+            puts '**** ACCEPT INVITATION USER: ' + invitee.email.to_s + " --- " + self.is_member?(invitee).to_s
             if (!self.is_member?(invitee))
               puts '**** ACCEPT INVITATION TOKEN: ' + invitation_token.to_s
               token_member = clazz.where(invitation_token: invitation_token, attendable: self)[0]
