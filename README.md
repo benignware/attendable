@@ -69,12 +69,12 @@ Besides the member association, calling acts_as_attendable generates the followi
   </tr>
   <tr>
     <td>invite(invitee)</td>
-    <td>Invite user to the attendable instance</td>
-    <td>Array</td>
+    <td>Invite user to the attendable instance. Returns the corresponding member object</td>
+    <td>Object</td>
   </tr>
   <tr>
     <td>accept_invitation(invitation_token, invitee)</td>
-    <td>Accept the invitation for the specified invitee</td>
+    <td>Accept the invitation for the specified invitee. Returns the corresponding member object</td>
     <td>Array</td>
   </tr>
 </table>
