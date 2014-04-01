@@ -51,19 +51,23 @@ module Attendable
         
         define_method "accept_invitation" do |invitation_token, invitee| 
           if (invitation_token && invitee)
-            token_member = clazz.where(invitation_token: invitation_token, attendable: self)[0]
-            if token_member
-              if token_member.invitee.nil?
-                # create member invitee
-                token_member.invitee = invitee
-                if !token_member.save
-                  # error while saving
+            if !is_member?(invitee)
+              token_member = clazz.where(invitation_token: invitation_token, attendable: self)[0]
+              if token_member
+                if token_member.invitee.nil?
+                  # create member invitee
+                  token_member.invitee = invitee
+                  if !token_member.save
+                    # error while saving
+                  end
+                elsif token_member.invitee != invitee
+                  # member's invitee is not the current invitee
+                  return nil
                 end
-              elsif token_member.invitee != invitee
-                # member's invitee is not the current invitee
-                return nil
+                return token_member
               end
-              return token_member
+            else
+              clazz.where(invitee: invitee)
             end
           end
         end
