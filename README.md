@@ -151,7 +151,7 @@ class EventsController < ApplicationController
 end
 ```
 
-Show a list of attendees on the event's page and provide the user with a link to update rsvp status:
+Show a list of attendees on the event's page and provide a link to update the user's rsvp status:
 ```
 # app/views/events/show.html.haml
 
@@ -161,3 +161,10 @@ Show a list of attendees on the event's page and provide the user with a link to
 
 <%= link_to(@event.is_attending?(current_user) ? "Refuse" : "Attend", rsvp_event_path(@event, {rsvp_status: @event.is_attending?(current_user) ? :declined : :attending})) %>
 ```
+
+
+Invitation Example
+------------------
+
+
+

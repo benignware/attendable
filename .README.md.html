@@ -572,7 +572,7 @@ class EventsController &lt; ApplicationController
 
 end
 </code></pre> 
-<p>Show a list of attendees on the event's page and provide the user with a link to update rsvp status:</p> 
+<p>Show a list of attendees on the event's page and provide a link to update the user's rsvp status:</p> 
 <pre><code># app/views/events/show.html.haml
 
 &lt;% @event.attendees.each do |user| %&gt;
@@ -580,6 +580,7 @@ end
 &lt;% end %&gt;
 
 &lt;%= link_to(@event.is_attending?(current_user) ? &quot;Refuse&quot; : &quot;Attend&quot;, rsvp_event_path(@event, {rsvp_status: @event.is_attending?(current_user) ? :declined : :attending})) %&gt;
-</code></pre>
+</code></pre> 
+<h2> <a name="invitation-example" class="anchor" href="..md.html#invitation-example"><span class="octicon octicon-link"></span></a>Invitation Example</h2>
 </body>
 </html>
