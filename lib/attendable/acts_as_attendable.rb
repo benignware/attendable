@@ -56,7 +56,7 @@ module Attendable
             if (!self.is_member?(invitee))
               puts '**** ACCEPT INVITATION TOKEN: ' + invitation_token.to_s
               token_member = clazz.where(invitation_token: invitation_token, attendable: self)[0]
-              puts '**** ACCEPT INVITATION TOKEN MEMBER: ' + token_member.to_s
+              puts '**** ACCEPT INVITATION TOKEN MEMBER: ' + token_member.to_s + " ---- " + token_member.invitee.to_s
               if token_member && token_member.invitee.nil?
                 token_member.invitee = invitee
                 if token_member.save
