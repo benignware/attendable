@@ -51,22 +51,23 @@ module Attendable
         
         define_method "accept_invitation" do |invitation_token, invitee| 
           puts '**** ACCEPT INVITATION: ' + invitee.to_s + " ----> " + invitee.email.to_s
-          if (invitee)
+          if (invitation_token && invitee)
             puts '**** ACCEPT INVITATION USER: ' + invitee.email.to_s + " --- " + self.is_member?(invitee).to_s
-            if (!self.is_member?(invitee))
+            #if (!self.is_member?(invitee))
               puts '**** ACCEPT INVITATION TOKEN: ' + invitation_token.to_s
               token_member = clazz.where(invitation_token: invitation_token, attendable: self)[0]
               puts '**** ACCEPT INVITATION TOKEN MEMBER: ' + token_member.to_s + " ---- " + token_member.invitee.to_s
               if token_member
                 if token_member.invitee.nil?
                   puts '**** MEMBER USER IS EMPTY'
+                  # create member invitee
                   token_member.invitee = invitee
                   if !token_member.save
                     # error while saving
                     puts '**** AN ERROR OCCURRED WHILE SAVING'
                   end
                 elsif token_member.invitee != invitee
-                  puts '**** MEMBER USER IS NOT INVITEE RETURN NIL' + token_member.invitee.id.to_s + " -> " + invitee.id.to_s
+                  # member's invitee is not the current invitee
                   return nil
                 end
                 puts '**** RETURN MEMBER'
@@ -78,7 +79,7 @@ module Attendable
               puts '**** GET MEMBER BY INVITEE '
               return clazz.where(invitee: invitee, attendable: self)[0]
             end
-          end
+          #end
         end
       end
   
