@@ -59,17 +59,20 @@ module Attendable
               puts '**** ACCEPT INVITATION TOKEN MEMBER: ' + token_member.to_s + " ---- " + token_member.invitee.to_s
               if token_member
                 if token_member.invitee.nil?
+                  puts '**** MEMBER USER IS EMPTY'
                   token_member.invitee = invitee
                   if !token_member.save
                     # error while saving
+                    puts '**** AN ERROR OCCURRED WHILE SAVING'
                   end
                 elsif token_member.invitee != invitee
-                  puts '**** MEMBER USER IS NOT INVITEE'
+                  puts '**** MEMBER USER IS NOT INVITEE RETURN NIL'
                   return nil
                 end
                 puts '**** RETURN MEMBER'
                 return token_member
               end
+              puts '**** NO MEMBER FOUND FOR TOKEN'
               return nil
             else
               puts '**** GET MEMBER BY INVITEE '
