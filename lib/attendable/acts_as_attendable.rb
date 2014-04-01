@@ -50,36 +50,22 @@ module Attendable
         end
         
         define_method "accept_invitation" do |invitation_token, invitee| 
-          puts '**** ACCEPT INVITATION: ' + invitee.to_s + " ----> " + invitee.email.to_s
           if (invitation_token && invitee)
-            puts '**** ACCEPT INVITATION USER: ' + invitee.email.to_s + " --- " + self.is_member?(invitee).to_s
-            #if (!self.is_member?(invitee))
-              puts '**** ACCEPT INVITATION TOKEN: ' + invitation_token.to_s
-              token_member = clazz.where(invitation_token: invitation_token, attendable: self)[0]
-              puts '**** ACCEPT INVITATION TOKEN MEMBER: ' + token_member.to_s + " ---- " + token_member.invitee.to_s
-              if token_member
-                if token_member.invitee.nil?
-                  puts '**** MEMBER USER IS EMPTY'
-                  # create member invitee
-                  token_member.invitee = invitee
-                  if !token_member.save
-                    # error while saving
-                    puts '**** AN ERROR OCCURRED WHILE SAVING'
-                  end
-                elsif token_member.invitee != invitee
-                  # member's invitee is not the current invitee
-                  return nil
+            token_member = clazz.where(invitation_token: invitation_token, attendable: self)[0]
+            if token_member
+              if token_member.invitee.nil?
+                # create member invitee
+                token_member.invitee = invitee
+                if !token_member.save
+                  # error while saving
                 end
-                puts '**** RETURN MEMBER'
-                return token_member
+              elsif token_member.invitee != invitee
+                # member's invitee is not the current invitee
+                return nil
               end
-              puts '**** NO MEMBER FOUND FOR TOKEN'
-              return nil
-            else
-              puts '**** GET MEMBER BY INVITEE '
-              return clazz.where(invitee: invitee, attendable: self)[0]
+              return token_member
             end
-          #end
+          end
         end
       end
   
