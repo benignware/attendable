@@ -202,11 +202,16 @@ MyApplication::Application.configure do
 end
 ```
 
-Setup the invitation mailer
+Generate the event mailer
+```
+rails g mailer EventMailer
+```
+
+Setup the invitation method
 ```
 # app/mailers/event_mailer.rb
 class EventMailer < ActionMailer::Base
-  default from: "mailer@localhost"
+  default from: "from@example.com"
   
   def invitation(email, event, member, inviter)
     @event = event
