@@ -449,9 +449,12 @@ function setDocumentScrollTop(ypos)
 
 </head>
 <body class="markdown-body">
-<h1> <a name="acts_as_attendable" class="anchor" href="..md.html#acts_as_attendable"><span class="octicon octicon-link"></span></a>acts_as_attendable</h1> 
-<p>The attendable-plugin let's you add members to a Group model and easily build rsvp actions</p> 
+<h1> <a name="attendable" class="anchor" href="..md.html#attendable"><span class="octicon octicon-link"></span></a>Attendable</h1> 
+<p>The attendable-plugin let's you add members to a model and easily setup rsvp actions</p> 
 <h2> <a name="usage" class="anchor" href="..md.html#usage"><span class="octicon octicon-link"></span></a>Usage</h2> 
+<p>Install the attendable-plugin by adding it to your Gemfile:</p> 
+<pre><code>gem 'attendable', github: 'rexblack/attendable'
+</code></pre> 
 <p>Create an example model</p> 
 <pre><code>rails g scaffold Event title:string date:date
 </code></pre> 
@@ -467,7 +470,7 @@ function setDocumentScrollTop(ypos)
 <p>Now let your main model acts as attendable:</p> 
 <pre><code># app/models/event.rb
 class Event &lt; ActiveRecord::Base
-  acts_as_attendable :event_members by: :users
+  acts_as_attendable :event_members, by: :users
 end
 </code></pre> 
 <p>This will add a has_many-association named 'event_members' to your model.</p> 
@@ -503,15 +506,80 @@ end
   </tr> 
   <tr> 
    <td>invite(invitee)</td> 
-   <td>Invite user to the attendable instance</td> 
-   <td>Array</td> 
+   <td>Invite user to the attendable instance. Returns the corresponding member object</td> 
+   <td>Object</td> 
   </tr> 
   <tr> 
    <td>accept_invitation(invitation_token, invitee)</td> 
-   <td>Accept the invitation for the specified invitee</td> 
+   <td>Accept the invitation for the specified invitee. Returns the corresponding member object</td> 
    <td>Array</td> 
   </tr> 
  </tbody>
 </table>
+<h2> <a name="basic-example" class="anchor" href="..md.html#basic-example"><span class="octicon octicon-link"></span></a>Basic Example</h2> 
+<p>In the following example, we'll build a simple rsvp-action where any user can attend to an event. </p> 
+<p>Generate models</p> 
+<pre><code>rails g scaffold Event title:string date:date
+rails g attendable:member EventMember
+rake db:migrate
+</code></pre> 
+<p>Setup routes</p> 
+<pre><code># config/routes.rb
+resources :events do
+  member do
+    get 'rsvp'
+  end
+end
+</code></pre> 
+<p>Make the model attendable:</p> 
+<pre><code># app/models/event.rb
+class Event &lt; ActiveRecord::Base
+  acts_as_attendable :event_members, by: :users
+end
+</code></pre> 
+<p>Setup controller actions</p> 
+<pre><code># app/controllers/event_controller.rb
+class EventsController &lt; ApplicationController
+
+  before_action :set_event, only: [:show, :edit, :update, :destroy, :rsvp]
+
+  ...
+
+  def create
+    @event = Event.new(event_params)
+    # automatically add the creator of the event as an attending member
+    @event.event_members.build({invitee: current_user, rsvp_status: :attending})
+  end
+
+  ...
+
+  def rsvp
+    # find current_user member
+    event_member = @event.event_members.where([&quot;invitee_id = ?&quot;, current_user.id])[0]
+    if event_member
+      event_member.rsvp_status = params[:rsvp_status]
+    else
+      # no member, so create one
+      event_member = @event.event_members.build({invitee: current_user, rsvp_status: :attending})
+    end
+    if event_member.save
+      redirect_to @event, notice: 'Status was successfully updated.'
+    else
+      redirect_to @event, notice: 'Status could not be saved.'
+    end
+
+  end
+
+end
+</code></pre> 
+<p>Show a list of attendees on the event's page and provide the user with a link to update rsvp status:</p> 
+<pre><code># app/views/events/show.html.haml
+
+&lt;% @event.attendees.each do |user| %&gt;
+  &lt;p&gt;User #&lt;%= user.id.to_s %&gt;&lt;/p&gt;
+&lt;% end %&gt;
+
+&lt;%= link_to(@event.is_attending?(current_user) ? &quot;Refuse&quot; : &quot;Attend&quot;, rsvp_event_path(@event, {rsvp_status: @event.is_attending?(current_user) ? :declined : :attending})) %&gt;
+</code></pre>
 </body>
 </html>

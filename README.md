@@ -1,10 +1,15 @@
 Attendable
 ==========
 
-The attendable-plugin let's you add members to a model and easily build rsvp actions
+The attendable-plugin let's you add members to a model and easily setup rsvp actions
 
 Usage
 -----
+
+Install the attendable-plugin by adding it to your Gemfile:
+```
+gem 'attendable', github: 'rexblack/attendable'
+```
 
 Create an example model
 ```
@@ -30,7 +35,7 @@ Now let your main model acts as attendable:
 ```
 # app/models/event.rb
 class Event < ActiveRecord::Base
-  acts_as_attendable :event_members by: :users
+  acts_as_attendable :event_members, by: :users
 end
 ```
 This will add a has_many-association named 'event_members' to your model.
@@ -78,3 +83,81 @@ Besides the member association, calling acts_as_attendable generates the followi
     <td>Array</td>
   </tr>
 </table>
+
+
+Basic Example
+-------------
+In the following example, we'll build a simple rsvp-action where any user can attend to an event. 
+
+Generate models
+```
+rails g scaffold Event title:string date:date
+rails g attendable:member EventMember
+rake db:migrate
+```
+
+Setup routes
+```
+# config/routes.rb
+resources :events do
+  member do
+    get 'rsvp'
+  end
+end
+```
+
+Make the model attendable:
+```
+# app/models/event.rb
+class Event < ActiveRecord::Base
+  acts_as_attendable :event_members, by: :users
+end
+```
+
+Setup controller actions
+```
+# app/controllers/event_controller.rb
+class EventsController < ApplicationController
+  
+  before_action :set_event, only: [:show, :edit, :update, :destroy, :rsvp]
+  
+  ...
+  
+  def create
+    @event = Event.new(event_params)
+    # automatically add the creator of the event as an attending member
+    @event.event_members.build({invitee: current_user, rsvp_status: :attending})
+  end
+  
+  ...
+  
+  def rsvp
+    # find current_user member
+    event_member = @event.event_members.where(["invitee_id = ?", current_user.id])[0]
+    if event_member
+      event_member.rsvp_status = params[:rsvp_status]
+    else
+      # no member, so create one
+      event_member = @event.event_members.build({invitee: current_user, rsvp_status: :attending})
+    end
+    if event_member.save
+      redirect_to @event, notice: 'Status was successfully updated.'
+    else
+      redirect_to @event, notice: 'Status could not be saved.'
+    end
+    
+  end
+  
+end
+```
+
+Show a list of attendees on the event's page and provide the user with a link to update rsvp status:
+```
+# app/views/events/show.html.haml
+
+<% @event.attendees.each do |user| %>
+  <p>User #<%= user.id.to_s %></p>
+<% end %>
+
+<%= link_to(@event.is_attending?(current_user) ? "Refuse" : "Attend", rsvp_event_path(@event, {rsvp_status: @event.is_attending?(current_user) ? :declined : :attending})) %>
+```
