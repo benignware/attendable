@@ -65,9 +65,7 @@ module Attendable
                 else
                   # error while saving
                 end
-              else
-                return nil
-              end
+              return token_member
             else
               puts '**** GET MEMBER BY INVITEE '
               return clazz.where(invitee: invitee, attendable: self)[0]
