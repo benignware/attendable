@@ -17,6 +17,7 @@ module Attendable
       end
       
       def create_migrations
+        puts 'create attendable member'
         migration_template 'create_attendable_members.erb', "db/migrate/create_#{name.tableize}.rb", {name: self.name, attributes: self.attributes}
         template 'attendable_member.erb', "app/models/#{name.tableize.singularize}.rb", {name: self.name, attributes: self.attributes}
       end

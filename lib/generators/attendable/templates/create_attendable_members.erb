@@ -5,7 +5,7 @@ class Create<%= name.pluralize %> < ActiveRecord::Migration
       t.<%= attribute.type %> :<%= attribute.name %>
 <% end %>
       t.references :attendable, polymorphic: true
-      t.references :invitee, polymorphic: true
+      t.references :invitable, polymorphic: true
       t.string :invitation_token
       t.string :invitation_key
       t.string :rsvp_status

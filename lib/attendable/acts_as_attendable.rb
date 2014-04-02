@@ -15,26 +15,26 @@ module Attendable
         attendee_class_name = options[:by].present? ? options[:by].to_s.classify : "User"
         table_name = class_name.tableize
         has_many name, as: :attendable, dependent: :destroy, class_name: class_name
-        has_many :attendees, conditions: "#{table_name}.rsvp_status = 'attending'", through: name, source: :invitee, source_type: attendee_class_name
+        has_many :attendees, conditions: "#{table_name}.rsvp_status = 'attending'", through: name, source: :invitable, source_type: attendee_class_name
         clazz = class_name.constantize
         
         # instance methods 
         define_method "is_member?" do |user| 
           puts 'is member? ' + user.to_s
           puts 'clazz: ' + clazz.to_s
-          clazz.where(invitee: user, attendable: self).count > 0
+          clazz.where(invitable: user, attendable: self).count > 0
         end
       
         define_method "is_invited?" do |user| 
-          clazz.where(invitee: user, attendable: self).count > 0
+          clazz.where(invitable: user, attendable: self).count > 0
         end
         
         define_method "is_attending?" do |user| 
-          clazz.where(invitee: user, attendable: self, rsvp_status: 'attending').count > 0
+          clazz.where(invitable: user, attendable: self, rsvp_status: 'attending').count > 0
         end
         
         define_method "has_declined?" do |user| 
-          clazz.where(invitee: user, attendable: self, rsvp_status: 'declined').count > 0
+          clazz.where(invitable: user, attendable: self, rsvp_status: 'declined').count > 0
         end
         
         define_method "invite" do |user| 
@@ -49,27 +49,27 @@ module Attendable
           end
         end
         
-        define_method "accept_invitation" do |invitation_token, invitee| 
-          if (invitation_token && invitee)
-            if !is_member?(invitee)
-              # only process invitation token if invitee is not already set
+        define_method "accept_invitation" do |invitation_token, invitable| 
+          if (invitation_token && invitable)
+            if !is_member?(invitable)
+              # only process invitation token if invitable is not already set
               token_member = clazz.where(invitation_token: invitation_token, attendable: self)[0]
               if token_member
-                if token_member.invitee.nil?
-                  # create member invitee
-                  token_member.invitee = invitee
+                if token_member.invitable.nil?
+                  # create member invitable
+                  token_member.invitable = invitable
                   if !token_member.save
                     # error while saving
                   end
-                elsif token_member.invitee != invitee
-                  # member's invitee is not the current invitee
+                elsif token_member.invitable != invitable
+                  # member's invitable is not the current invitable
                   return nil
                 end
                 return token_member
               end
             else
-              # if a member for invitee already exists, return the current invitee's member
-              token_member = clazz.where(invitee: invitee).first
+              # if a member for invitable already exists, return the current invitable's member
+              token_member = clazz.where(invitable: invitable).first
               return token_member
             end
           end
