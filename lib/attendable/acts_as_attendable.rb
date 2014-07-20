@@ -22,19 +22,19 @@ module Attendable
         define_method "is_member?" do |user| 
           puts 'is member? ' + user.to_s
           puts 'clazz: ' + clazz.to_s
-          clazz.where(invitable: user, attendable: self).count > 0
+          clazz.where(invitable: user, attendable: self).count > 0 if !user.nil?
         end
       
         define_method "is_invited?" do |user| 
-          clazz.where(invitable: user, attendable: self).count > 0
+          clazz.where(invitable: user, attendable: self).count > 0 if !user.nil?
         end
         
         define_method "is_attending?" do |user| 
-          clazz.where(invitable: user, attendable: self, rsvp_status: 'attending').count > 0
+          clazz.where(invitable: user, attendable: self, rsvp_status: 'attending').count > 0 if !user.nil?
         end
         
         define_method "has_declined?" do |user| 
-          clazz.where(invitable: user, attendable: self, rsvp_status: 'declined').count > 0
+          clazz.where(invitable: user, attendable: self, rsvp_status: 'declined').count > 0 if !user.nil?
         end
         
         define_method "invite" do |user| 
