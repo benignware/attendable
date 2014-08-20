@@ -15,7 +15,7 @@ module Attendable
         attendee_class_name = options[:by].present? ? options[:by].to_s.classify : "User"
         table_name = class_name.tableize
         has_many name, as: :attendable, dependent: :destroy, class_name: class_name
-        has_many :attendees, conditions: "#{table_name}.rsvp_status = 'attending'", through: name, source: :invitable, source_type: attendee_class_name
+        has_many :attendees, ->{where "#{table_name}.rsvp_status = 'attending'"}, through: name, source: :invitable, source_type: attendee_class_name
         clazz = class_name.constantize
         
         # instance methods 
