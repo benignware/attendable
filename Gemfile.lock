@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    attendable (0.0.2)
+    attendable (0.0.3)
       rails (>= 4.0.3)
 
 GEM
